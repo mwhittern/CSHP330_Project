@@ -56,8 +56,8 @@ namespace CSHP_330_Project.Controllers
             // value.Id = users.Users.Select(u => u.Id).Max() + 1;
             // value.createdDate = DateTime.UtcNow;
             // users.Users.Add(value);
-            
-            return Created("google.com", users.Find(userID));
+
+            return CreatedAtAction(nameof(Get), new {id = userID},  value);
         }
         
         

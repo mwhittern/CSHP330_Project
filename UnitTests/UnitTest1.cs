@@ -11,8 +11,8 @@ public class Tests
     [SetUp]
     public void Setup()
     {
-        string userEmail = "blah@email.com";
-        string userPassword = "pass1";
+        string userEmail = "admin@email.com";
+        string userPassword = "adminadmin";
         
         client = new HttpClient();
         client.BaseAddress = new Uri("http://localhost:5014/api/");
