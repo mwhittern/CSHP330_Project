@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using CSHP_330_Project.Controllers;
 using CSHP_330_Project.Repo;
 
 namespace HelloWorldService.Controllers
@@ -15,20 +13,20 @@ namespace HelloWorldService.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly IUserRepository users;
+        private readonly IUserRepository _users;
 
         public TokenController(IUserRepository userRepository)
         {
-            users = userRepository;
+            _users = userRepository;
         }
 
         // This should require SSL
         [HttpPost]
         public dynamic Post([FromBody] TokenRequest tokenRequest)
         {
-            int userCount = users.Users.Count(u =>
+            int userCount = _users.Users.Count(u =>
                 u.password == tokenRequest.Password &&
-                u.email.Trim().ToLower() == tokenRequest.UserEmail.Trim().ToLower());
+                string.Equals(u.email.Trim(), tokenRequest.UserEmail.Trim(), StringComparison.CurrentCultureIgnoreCase));
 
             if (userCount <= 0)
             {
@@ -43,9 +41,9 @@ namespace HelloWorldService.Controllers
         [HttpGet("{userEmail}/{password}")]
         public dynamic Get(string userEmail, string password)
         {
-            int userCount = users.Users.Count(u =>
+            int userCount = _users.Users.Count(u =>
                 u.password == password &&
-                u.email.Trim().ToLower() == userEmail.Trim().ToLower());
+                string.Equals(u.email.Trim(), userEmail.Trim(), StringComparison.CurrentCultureIgnoreCase));
 
             if (userCount <= 0)
             {
