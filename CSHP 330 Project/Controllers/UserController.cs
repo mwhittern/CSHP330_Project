@@ -22,7 +22,7 @@ namespace CSHP_330_Project.Controllers
         {
             users = userRepository;
         }
-        
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -45,7 +45,7 @@ namespace CSHP_330_Project.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] User value)
         {
-            if( string.IsNullOrEmpty(value.email) || string.IsNullOrEmpty(value.password))
+            if (string.IsNullOrEmpty(value.email) || string.IsNullOrEmpty(value.password))
             {
                 return BadRequest();
             }
@@ -56,28 +56,26 @@ namespace CSHP_330_Project.Controllers
             // value.createdDate = DateTime.UtcNow;
             // users.Users.Add(value);
 
-            return CreatedAtAction(nameof(Get), new {id = userID},  value);
+            return CreatedAtAction(nameof(Get), new { id = userID }, value);
         }
-        
-        
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var rowsDeletedFromDb = users.DeleteId(id);// users.RemoveAll(u => u.Id == id);
+            var rowsDeletedFromDb = users.DeleteId(id); // users.RemoveAll(u => u.Id == id);
 
             if (rowsDeletedFromDb == 0)
             {
                 return NotFound(id);
             }
-            
+
             return Ok();
         }
-        
-        
+
         [HttpPut]
         public IActionResult Put([FromBody] User value)
         {
-            if( string.IsNullOrEmpty(value.email) || value.Id == null)
+            if (string.IsNullOrEmpty(value.email) || value.Id == null)
             {
                 return BadRequest();
             }
@@ -86,7 +84,7 @@ namespace CSHP_330_Project.Controllers
 
             if (updatedUser == null)
                 return NotFound();
-            
+
             return Ok();
         }
     }
