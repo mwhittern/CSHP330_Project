@@ -16,7 +16,8 @@ public class UserRepository : IUserRepository
     private static List<User> _users = new List<User>(){
         new User(101, "blah@email.com", "pass1"),
         new User(102, "foo@email.com", "pass2"),
-        new User(103, "bar@email.com", "pass3")
+        new User(103, "bar@email.com", "pass3"),
+        new User(104, "admin@email.com", "adminadmin")
     };
 
     public IEnumerable<User> Users => _users;
