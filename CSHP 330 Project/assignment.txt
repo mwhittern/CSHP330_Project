@@ -1,0 +1,29 @@
+﻿Create a REST web service for a User object.
+
+To submit this assignment, create a zip file of your GitHub repository OR include the GitHub URL of your project in the assignment submission Comments field.
+
+Service Requirements:
+
+POST to add a user and return a 201 Created (50 pts)
+    Verify required field and return BadRequest if fields are not filled in
+PUT {guid} to update a user and return a 200 OK (50 pts)
+    Verify required field and return BadRequest if fields are not filled in
+GET to get all users and return 200 OK (50 pts)
+GET {guid} to get a single user and return 200 OK (50 pts)
+    Return 404 if not found
+DELETE {guid} to delete a single user and return a 200 or 404 if the user is not found (50 pts)
+Create Postman requests for each action (export your requests and save it to the repo) (50 pts)
+Create a custom /login/{userEmail}/{userPassword} endpoint that returns an encrypted token. This is discussed in the Security and Attribute Routing topics. (100 pts)
+Add unit tests (success and failure) for all operations
+    Get specific good
+    Get specific bad
+    Add invalid contact (missing fields)
+    Add valid contact
+    etc...
+You DO NOT need a database, you can store it internally in a List or Array.
+
+The user object will contain:
+    User Id (service or database auto-generated guid)
+    User Email (required)
+    User Password (required) store it in plain text or better yet hashed
+    Created Date (service generated)
