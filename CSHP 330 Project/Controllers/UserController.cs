@@ -1,6 +1,5 @@
 ﻿using CSHP_330_Project.model;
 using CSHP_330_Project.Repo;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSHP_330_Project.Controllers

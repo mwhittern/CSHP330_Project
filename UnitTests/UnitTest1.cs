@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -6,40 +7,40 @@ namespace UnitTests;
 
 public class Tests
 {
-    HttpClient client;
-    
+    private HttpClient _client = null!;
+
     [SetUp]
     public void Setup()
     {
         string userEmail = "admin@email.com";
         string userPassword = "adminadmin";
-        
-        client = new HttpClient();
-        client.BaseAddress = new Uri("http://localhost:5014/api/");
 
-        var tokenResult = client.GetAsync($"/login/{userEmail}/{userPassword}").Result;
+        _client = new HttpClient();
+        _client.BaseAddress = new Uri("http://localhost:5014/api/");
+
+        var tokenResult = _client.GetAsync($"/login/{userEmail}/{userPassword}").Result;
         var tokenJson = tokenResult.Content.ReadAsStringAsync().Result;
         var token = JsonSerializer.Deserialize<Token>(tokenJson);
 
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.TokenString);
+        _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.TokenString);
     }
 
     [Test]
     public async Task GetSpecificGood()
     {
-        var result = await client.GetAsync($"api/User/101");
-        
+        var result = await _client.GetAsync($"api/User/101");
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
-    
+
     [Test]
     public async Task GetSpecificBad()
     {
-        var result = await client.GetAsync($"api/User/999999");
-        
+        var result = await _client.GetAsync($"api/User/999999");
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
-    
+
     [Test]
     public async Task AddInvalidUser()
     {
@@ -47,11 +48,11 @@ public class Tests
 
         var asJson = JsonSerializer.Serialize(newUser);
         var postContent = new StringContent(asJson, Encoding.UTF8, "application/json");
-        var result = await client.PostAsync("User", postContent);
-        
+        var result = await _client.PostAsync("User", postContent);
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
     }
-    
+
     [Test]
     public async Task AddValidUser()
     {
@@ -59,27 +60,27 @@ public class Tests
 
         var asJson = JsonSerializer.Serialize(newUser);
         var postContent = new StringContent(asJson, Encoding.UTF8, "application/json");
-        var result = await client.PostAsync("User", postContent);
-        
+        var result = await _client.PostAsync("User", postContent);
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
     }
-    
+
     [Test]
     public async Task DeleteValidUser()
     {
-        var result = await client.DeleteAsync("User/103");
-        
+        var result = await _client.DeleteAsync("User/103");
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
-    
+
     [Test]
     public async Task DeleteInvalidUser()
     {
-        var result = await client.DeleteAsync("User/8888");
-        
-        Assert.That( result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        var result = await _client.DeleteAsync("User/8888");
+
+        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
-    
+
     [Test]
     public async Task UpdateExistingUser()
     {
@@ -87,11 +88,11 @@ public class Tests
 
         var asJson = JsonSerializer.Serialize(newUser);
         var postContent = new StringContent(asJson, Encoding.UTF8, "application/json");
-        var result = await client.PutAsync("User", postContent);
-        
+        var result = await _client.PutAsync("User", postContent);
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
-    
+
     [Test]
     public async Task UpdateUnknownUser()
     {
@@ -99,8 +100,8 @@ public class Tests
 
         var asJson = JsonSerializer.Serialize(newUser);
         var postContent = new StringContent(asJson, Encoding.UTF8, "application/json");
-        var result = await client.PutAsync("User", postContent);
-        
+        var result = await _client.PutAsync("User", postContent);
+
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 }
